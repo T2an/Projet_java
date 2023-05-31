@@ -73,7 +73,7 @@ public class ScoreWindow extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose(); // Fermer la fenêtre des résultats
-                MainWindow mainWindow = new MainWindow("Nouvelle partie");
+                MainWindow mainWindow = new MainWindow("Nouvelle partie", joueur1.getPseudo(), joueur2.getPseudo());
                 mainWindow.display(); // Lancer une nouvelle instance de MainWindow
             }
         });

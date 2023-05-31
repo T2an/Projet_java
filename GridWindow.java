@@ -1,4 +1,6 @@
 import javax.swing.*;
+import javax.swing.border.LineBorder;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -7,7 +9,7 @@ import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import java.util.Random;
 
 public class GridWindow extends JFrame {
     private JPanel gridPanel;
@@ -17,26 +19,39 @@ public class GridWindow extends JFrame {
     private Map<Carte, JLabel> carteLabelMap;
     private JLabel joueurActifLabel;
     private Joueur joueurActif;
+    private JButton rejouerButton;
+    private JButton terminerButton;
 
-    public GridWindow(String title, int col, int row, List<Carte> cartes, Image verso, Joueur joueur1, Joueur joueur2) {
+    public GridWindow(String title, int col, int row, List<Carte> cartes, Image verso, Joueur joueur1, Joueur joueur2, String theme) {
         super(title);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(200*row, 200*col); // Taille initiale de la fenêtre
         setMinimumSize(new Dimension(600, 600)); // Taille minimale de la fenêtre
-        initializeComponents(col, row, cartes, verso, joueur1, joueur2);
+        initializeComponents(col, row, cartes, verso, joueur1, joueur2, theme);
     }
 
-    private void initializeComponents(int col, int row, List<Carte> cartes, Image verso, Joueur joueur1, Joueur joueur2) {
+    private void initializeComponents(int col, int row, List<Carte> cartes, Image verso, Joueur joueur1, Joueur joueur2, String theme) {
+        Random random = new Random();
+        //Choix aléatoire du premier joueur
+        int randomNumber = random.nextInt(2);
+        if (randomNumber == 0) {
+            joueurActif = joueur1;
+        } else {
+            joueurActif = joueur2;
+        }
         // Création du bandeau gris en haut de l'interface
         JPanel headerPanel = new JPanel();
-        headerPanel.setBackground(Color.GRAY);
-        headerPanel.setLayout(new BorderLayout());
+        headerPanel.setLayout(new BoxLayout(headerPanel, BoxLayout.X_AXIS));
 
-        // Création des panneaux pour les informations des joueurs
+        // Création du panel pour le label du joueur 1
         JPanel joueur1Panel = new JPanel();
         joueur1Panel.setBackground(Color.BLUE);
+        joueur1Panel.setLayout(new BorderLayout());
+
+        // Création du panel pour le label du joueur 2
         JPanel joueur2Panel = new JPanel();
         joueur2Panel.setBackground(Color.RED);
+        joueur2Panel.setLayout(new BorderLayout());
 
         // Création des labels pour les informations des joueurs
         JLabel joueur1Label = new JLabel(joueur1.getPseudo() + " (" + joueur1.getNbPairs() + " pairs)");
@@ -51,31 +66,25 @@ public class GridWindow extends JFrame {
         joueur1Label.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
         joueur2Label.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
 
-        // Ajout des labels aux panneaux des joueurs
-        joueur1Panel.add(joueur1Label);
-        joueur2Panel.add(joueur2Label);
+        // Ajout des labels aux panels des joueurs
+        joueur1Panel.add(joueur1Label, BorderLayout.CENTER);
+        joueur2Panel.add(joueur2Label, BorderLayout.CENTER);
 
-        // Ajout des panneaux des joueurs au bandeau
-        headerPanel.add(joueur1Panel, BorderLayout.WEST);
-        headerPanel.add(joueur2Panel, BorderLayout.EAST);
+        // Ajout des panels des joueurs au bandeau supérieur
+        headerPanel.add(joueur1Panel);
+        headerPanel.add(joueur2Panel);
 
-        // Création du label pour le message du joueur actif
-        joueurActifLabel = new JLabel("Au tour de " + joueur1.getPseudo() + " !");
-        joueurActifLabel.setFont(font);
-        joueurActifLabel.setForeground(Color.WHITE);
-        joueurActifLabel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-        joueurActifLabel.setHorizontalAlignment(SwingConstants.CENTER);
-
-        // Ajout du label du joueur actif au centre du bandeau
-        headerPanel.add(joueurActifLabel, BorderLayout.CENTER);
-
-        // Ajout du bandeau en haut de la fenêtre
+        headerPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        headerPanel.setBackground(Color.BLACK);
+        // Ajout du bandeau supérieur en haut de la fenêtre
         add(headerPanel, BorderLayout.NORTH);
+
+
         gridPanel = new JPanel();
         gridPanel.setLayout(new GridLayout(col, row, 10, 10));
-        gridPanel.setBackground(Color.WHITE);
+        gridPanel.setBackground(Color.BLUE);
         carteLabelMap = new HashMap<>();
-        joueurActif = joueur1;
+
         // Ajout des composants représentant les cartes
         for (Carte carte : cartes) {
             JLabel carteLabel;
@@ -145,6 +154,60 @@ public class GridWindow extends JFrame {
             gridPanel.add(carteLabel);
         }
 
+
+
+        JPanel footerPanel = new JPanel();
+        footerPanel.setBackground(Color.BLUE);
+        footerPanel.setBorder(new LineBorder(Color.BLACK, 5)); // Définition de la couleur et de l'épaisseur de la bordure
+        
+        // Création du label pour le message du joueur actif
+        joueurActifLabel = new JLabel("Au tour de " + joueurActif.getPseudo() + " !");
+        joueurActifLabel.setFont(font);
+        joueurActifLabel.setForeground(Color.WHITE);
+        joueurActifLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        // Utilisation d'un BoxLayout pour aligner les composants horizontalement
+        footerPanel.setLayout(new BoxLayout(footerPanel, BoxLayout.X_AXIS));
+        
+        // Création des boutons
+        rejouerButton = new JButton("Rejouer");
+        rejouerButton.setFont(font);
+        
+        terminerButton = new JButton("Terminer");
+        terminerButton.setFont(font);
+        
+        // Ajout des boutons au footerPanel
+
+        footerPanel.add(rejouerButton);
+        footerPanel.add(Box.createHorizontalGlue()); // Ajout d'un espace flexible pour séparer les boutons
+        footerPanel.add(joueurActifLabel);
+        footerPanel.add(Box.createHorizontalGlue()); // Ajout d'un espace flexible pour séparer les boutons
+        footerPanel.add(terminerButton);
+        
+        rejouerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                joueur1.reinitialiserNbPairs();
+                joueur2.reinitialiserNbPairs();
+                GestionnaireCartes gestionnaireCartes = new GestionnaireCartes();
+                gestionnaireCartes.chargerCartes(200, 200, col*row/2, theme);
+                gestionnaireCartes.melangerCartes();
+                GridWindow gridWindow = new GridWindow("Memory", col, row, gestionnaireCartes.getCartes(), gestionnaireCartes.getVerso(), joueur1, joueur2, theme);
+                gridWindow.display();
+                dispose();
+            }
+        });
+
+        terminerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MainWindow mainWindow = new MainWindow("Nouvelle partie", joueur1.getPseudo(), joueur2.getPseudo());
+                mainWindow.display();
+                dispose();
+            }
+        });
+
+        // Ajout du footerPanel en bas de la fenêtre
+        add(footerPanel, BorderLayout.SOUTH);
         add(gridPanel);
     }
 

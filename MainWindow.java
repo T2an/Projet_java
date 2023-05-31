@@ -12,16 +12,16 @@ public class MainWindow extends JFrame {
     private JComboBox<String> comboBoxTaille;
     private JButton jouerButton;
 
-    public MainWindow(String title) {
+    public MainWindow(String title, String pseudo1, String pseudo2) {
         super(title);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1000, 1000);
         getContentPane().setBackground(new Color(210, 210, 210));
-        initializeComponents();
+        initializeComponents(pseudo1,pseudo2);
         setupListeners();
     }
 
-    private void initializeComponents() {
+    private void initializeComponents(String pseudo1, String pseudo2) {
         Font labelFont = new Font("Arial", Font.BOLD, 24);
         Font buttonFont = new Font("Arial", Font.BOLD, 20);
 
@@ -32,6 +32,7 @@ public class MainWindow extends JFrame {
         textField1 = new JTextField();
         textField1.setFont(labelFont);
         textField1.setBounds(400, 200, 300, 40);
+        textField1.setText(pseudo1); // Ajout de la valeur par défaut
 
         JLabel label3 = new JLabel("Pseudo 2:");
         label3.setFont(labelFont);
@@ -40,6 +41,7 @@ public class MainWindow extends JFrame {
         textField2 = new JTextField();
         textField2.setFont(labelFont);
         textField2.setBounds(400, 300, 300, 40);
+        textField2.setText(pseudo2); // Ajout de la valeur par défaut
 
         label2 = new JLabel("Thème :");
         label2.setFont(labelFont);
@@ -101,7 +103,7 @@ public class MainWindow extends JFrame {
                             GestionnaireCartes gestionnaireCartes = new GestionnaireCartes();
                             gestionnaireCartes.chargerCartes(200, 200, col*row/2, theme);
                             gestionnaireCartes.melangerCartes();
-                            GridWindow gridWindow = new GridWindow("Exemple de grille", col, row, gestionnaireCartes.getCartes(), gestionnaireCartes.getVerso(), joueur1, joueur2);
+                            GridWindow gridWindow = new GridWindow("Memory", col, row, gestionnaireCartes.getCartes(), gestionnaireCartes.getVerso(), joueur1, joueur2, theme);
                             gridWindow.display();
                             dispose(); 
                         } catch (NumberFormatException j) {
