@@ -1,0 +1,3 @@
+Mettre les parametre utile dans un fichier de configuration (vraiment utile ? En tout cas demandé par le sujet)
+Améliorer les graphisme
+Rapport
