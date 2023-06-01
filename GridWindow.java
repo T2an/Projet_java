@@ -49,8 +49,8 @@ public class GridWindow extends JFrame {
         int randomNumber = random.nextInt(2);
         if (randomNumber == 0) {
             joueurActif = joueur1;
-            joueur1Panel.setBackground(Color.BLUE);
-            joueur2Panel.setBackground(Color.RED);
+            joueur1Panel.setBackground(Color.RED);
+            joueur2Panel.setBackground(Color.BLUE);
         } else {
             joueurActif = joueur2;
             joueur2Panel.setBackground(Color.RED);
