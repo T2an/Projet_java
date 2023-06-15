@@ -4,16 +4,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class ScoreWindow extends JFrame {
-    private JLabel labelGagnant;
-    private JLabel labelScoreGagnant;
-    private JLabel labelScorePerdant;
     Joueur gagnant;
     Joueur perdant;
 
     public ScoreWindow(Joueur joueur1, Joueur joueur2) {
         super("Résultats du jeu");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1000, 1000);
+        setSize(1280, 720);
+        setLocationRelativeTo(null);
         initializeComponents(joueur1, joueur2);
     }
 
@@ -35,6 +33,9 @@ public class ScoreWindow extends JFrame {
             perdant=null;
         }
 
+        JLabel labelGagnant;
+        JLabel labelScorePerdant;
+        JLabel labelScoreGagnant;
         if (gagnant==null){
             labelGagnant = new JLabel("Egalité entre les deux joueurs !");
             labelScoreGagnant = new JLabel("Score de " + joueur1.getPseudo() + ": " + joueur1.getNbPairs());
@@ -64,6 +65,10 @@ public class ScoreWindow extends JFrame {
 
         constraints.gridy = 2;
         panel.add(labelScorePerdant, constraints);
+
+        ImageIcon test = new ImageIcon("congratulation.gif");
+        JLabel picLabel = new JLabel(test);
+        panel.add(picLabel);
 
         JButton nouvellePartieButton = new JButton("Nouvelle partie");
         nouvellePartieButton.setFont(new Font("Arial", Font.BOLD, 25));

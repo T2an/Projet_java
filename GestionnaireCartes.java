@@ -28,15 +28,14 @@ public class GestionnaireCartes {
     public void setCarteVerso(File ficherVerso, int largeurCase, int hauteurCase) {
         try {
             BufferedImage image = ImageIO.read(ficherVerso);
-            Image imageRedimensionnee = redimensionnerImage(image, largeurCase, hauteurCase);
-            this.carteVerso = imageRedimensionnee;
+            this.carteVerso = redimensionnerImage(image, largeurCase, hauteurCase);
         } catch (IOException e) {
             System.out.println("Erreur lors du chargement de l'image : " + ficherVerso.getName());
         }
     }
 
     public void chargerCartes(int largeurCase, int hauteurCase, int nb_cartes, String theme) {
-        File fichierVerso = new File("verso2.jpg");
+        File fichierVerso = new File("verso.jpg");
         setCarteVerso(fichierVerso, largeurCase, hauteurCase);
         File dossierCartes = new File(theme);
         if (dossierCartes.isDirectory()) {

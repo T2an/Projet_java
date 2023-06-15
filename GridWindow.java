@@ -12,55 +12,48 @@ import java.util.Map;
 import java.util.Random;
 
 public class GridWindow extends JFrame {
-    private JPanel gridPanel;
     private Carte carte1Cliquee;
     private Carte carte2Cliquee;
     private Timer timer;
     private Map<Carte, JLabel> carteLabelMap;
     private JLabel joueurActifLabel;
     private Joueur joueurActif;
-    private JButton rejouerButton;
-    private JButton terminerButton;
 
     public GridWindow(String title, int col, int row, List<Carte> cartes, Image verso, Joueur joueur1, Joueur joueur2, String theme) {
         super(title);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(200*row, 200*col); // Taille initiale de la fenêtre
+        setLocationRelativeTo(null);
         setMinimumSize(new Dimension(600, 600)); // Taille minimale de la fenêtre
         initializeComponents(col, row, cartes, verso, joueur1, joueur2, theme);
     }
 
     private void initializeComponents(int col, int row, List<Carte> cartes, Image verso, Joueur joueur1, Joueur joueur2, String theme) {
-
+        Random random = new Random();
+        //Choix aléatoire du premier joueur
+        int randomNumber = random.nextInt(2);
+        if (randomNumber == 0) {
+            joueurActif = joueur1;
+        } else {
+            joueurActif = joueur2;
+        }
         // Création du bandeau gris en haut de l'interface
         JPanel headerPanel = new JPanel();
         headerPanel.setLayout(new BoxLayout(headerPanel, BoxLayout.X_AXIS));
 
         // Création du panel pour le label du joueur 1
         JPanel joueur1Panel = new JPanel();
+        joueur1Panel.setBackground(Color.blue);
         joueur1Panel.setLayout(new BorderLayout());
 
         // Création du panel pour le label du joueur 2
         JPanel joueur2Panel = new JPanel();
+        joueur2Panel.setBackground(new Color(238, 127, 27));
         joueur2Panel.setLayout(new BorderLayout());
-
-        Random random = new Random();
-        //Choix aléatoire du premier joueur
-        int randomNumber = random.nextInt(2);
-        if (randomNumber == 0) {
-            joueurActif = joueur1;
-            joueur1Panel.setBackground(Color.RED);
-            joueur2Panel.setBackground(Color.BLUE);
-        } else {
-            joueurActif = joueur2;
-            joueur2Panel.setBackground(Color.RED);
-            joueur1Panel.setBackground(Color.BLUE);
-        }
 
         // Création des labels pour les informations des joueurs
         JLabel joueur1Label = new JLabel(joueur1.getPseudo() + " (" + joueur1.getNbPairs() + " pairs)");
         JLabel joueur2Label = new JLabel(joueur2.getPseudo() + " (" + joueur2.getNbPairs() + " pairs)");
-
 
         // Stylisation des labels
         Font font = joueur1Label.getFont().deriveFont(Font.BOLD, 20f);
@@ -80,15 +73,16 @@ public class GridWindow extends JFrame {
         headerPanel.add(joueur2Panel);
 
         headerPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        headerPanel.setBackground(Color.BLACK);
-
+        headerPanel.setBackground(new Color(140,144,136));
         // Ajout du bandeau supérieur en haut de la fenêtre
         add(headerPanel, BorderLayout.NORTH);
 
 
-        gridPanel = new JPanel();
+        JPanel gridPanel = new JPanel();
         gridPanel.setLayout(new GridLayout(col, row, 10, 10));
-        gridPanel.setBackground(Color.BLUE);
+        gridPanel.setBackground(new Color(0, 130, 196));
+        gridPanel.setBorder(new LineBorder(new Color(140,144,136), 5)); // Définition de la couleur et de l'épaisseur de la bordure
+
         carteLabelMap = new HashMap<>();
 
         // Ajout des composants représentant les cartes
@@ -125,13 +119,8 @@ public class GridWindow extends JFrame {
                                         carte2Cliquee = null;
                                         if (joueurActif == joueur1) {
                                             joueurActif = joueur2;
-                                            joueur1Panel.setBackground(Color.BLUE);
-                                            joueur2Panel.setBackground(Color.RED);
-
                                         } else {
                                             joueurActif = joueur1;
-                                            joueur2Panel.setBackground(Color.BLUE);
-                                            joueur1Panel.setBackground(Color.RED);
                                         }
                                         joueurActifLabel.setText(("Au tour de " + joueurActif.getPseudo() + " !"));
                                         timer.stop();
@@ -168,8 +157,8 @@ public class GridWindow extends JFrame {
 
 
         JPanel footerPanel = new JPanel();
-        footerPanel.setBackground(Color.BLUE);
-        footerPanel.setBorder(new LineBorder(Color.BLACK, 5)); // Définition de la couleur et de l'épaisseur de la bordure
+        footerPanel.setBackground(new Color(0, 130, 196));
+        footerPanel.setBorder(new LineBorder(new Color(140,144,136), 5)); // Définition de la couleur et de l'épaisseur de la bordure
         
         // Création du label pour le message du joueur actif
         joueurActifLabel = new JLabel("Au tour de " + joueurActif.getPseudo() + " !");
@@ -180,10 +169,10 @@ public class GridWindow extends JFrame {
         footerPanel.setLayout(new BoxLayout(footerPanel, BoxLayout.X_AXIS));
         
         // Création des boutons
-        rejouerButton = new JButton("Rejouer");
+        JButton rejouerButton = new JButton("Rejouer");
         rejouerButton.setFont(font);
-        
-        terminerButton = new JButton("Terminer");
+
+        JButton terminerButton = new JButton("Terminer");
         terminerButton.setFont(font);
         
         // Ajout des boutons au footerPanel
